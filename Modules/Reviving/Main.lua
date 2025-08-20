@@ -57,7 +57,7 @@ end
 
 local function MBH_AnnounceResurrection(Name, Channel)
     SendAddonMessage(MBH.Session.Reviving.Add_BlackList, Name, Channel)
-    mb_message("Ressing <"..Name..">")
+    mb_cdMessage("Ressing <"..Name..">")
 end
 
 -------------------------------------------------------------------------------
