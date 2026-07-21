@@ -270,13 +270,15 @@ function MBH_SetupSavedVariables()
 
     for i in MBH.DefaultOptions do
         if (not MoronBoxHeal_Options[i]) then
-            MoronBoxHeal_Options[i] = MBH.DefaultOptions[i]
+            MoronBoxHeal_Options[i] = getApi().CopyTable(MBH.DefaultOptions[i])
         end
     end
 end
 
 function AddonInitializer:OnUpdate()
-    MBH.Session.AddonLoader.Cooldown = MBH.Session.AddonLoader.Cooldown - MBH.Session.Elapsed
+    local elapsed = arg1 or 0
+    MBH.Session.Elapsed = elapsed
+    MBH.Session.AddonLoader.Cooldown = MBH.Session.AddonLoader.Cooldown - elapsed
     if MBH.Session.AddonLoader.Cooldown > 0 then return end
 
     MBH_PrintMessage(MBH_ADDONLOADED)

@@ -235,7 +235,7 @@ function MBH_GetNumberOfParties()
         numberOfParties = math.max(MIN_PARTIES, numberOfParties)
         numberOfParties = math.min(MAX_PARTIES, numberOfParties)
     else
-        numberOfParties = 2
+        numberOfParties = 1
     end
 
     return random(numberOfParties)

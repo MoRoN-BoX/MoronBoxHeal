@@ -14,8 +14,8 @@ function MBH_InitializeManaProtectionThresholds()
                 )
             end,
             ["Spell"] = MBH_SPELL_HEAL,
-            ["LAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_LAR,
-            ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_HAR,
+            ["LAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_LAR end,
+            ["HAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_HAR end,
         },
         [MBH_SPELL_HEAL] = {
             ["ThresholdCheck"] = function()
@@ -25,8 +25,8 @@ function MBH_InitializeManaProtectionThresholds()
                 )
             end,
             ["Spell"] = MBH_SPELL_LESSER_HEAL,
-            ["LAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_LAR,
-            ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_HAR,
+            ["LAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_LAR end,
+            ["HAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_HAR end,
         },
         [MBH_SPELL_GREATER_HEAL] = {
             ["ThresholdCheck"] = function()
@@ -36,8 +36,8 @@ function MBH_InitializeManaProtectionThresholds()
                 )
             end,
             ["Spell"] = MBH_SPELL_HEAL,
-            ["LAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_LAR,
-            ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_HAR,
+            ["LAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_LAR end,
+            ["HAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_HAR end,
         },
         [MBH_SPELL_CHAIN_HEAL] = {
             ["ThresholdCheck"] = function()
@@ -47,8 +47,8 @@ function MBH_InitializeManaProtectionThresholds()
                 )
             end,
             ["Spell"] = MBH_SPELL_HEALING_WAVE,
-            ["LAR"] = MoronBoxHeal_Options.ManaProtectionValues.Shaman.Chain_Heal_LAR,
-            ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Shaman.Chain_Heal_HAR,
+            ["LAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Shaman.Chain_Heal_LAR end,
+            ["HAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Shaman.Chain_Heal_HAR end,
         },
         [MBH_SPELL_LESSER_HEALING_WAVE] = {
             ["ThresholdCheck"] = function()
@@ -58,8 +58,8 @@ function MBH_InitializeManaProtectionThresholds()
                 )
             end,
             ["Spell"] = MBH_SPELL_HEALING_WAVE,
-            ["LAR"] = MoronBoxHeal_Options.ManaProtectionValues.Shaman.Lesser_Healing_Wave_LAR,
-            ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Shaman.Lesser_Healing_Wave_HAR,
+            ["LAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Shaman.Lesser_Healing_Wave_LAR end,
+            ["HAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Shaman.Lesser_Healing_Wave_HAR end,
         },
         [MBH_SPELL_HOLY_LIGHT] = {
             ["ThresholdCheck"] = function()
@@ -69,8 +69,8 @@ function MBH_InitializeManaProtectionThresholds()
                 )
             end,
             ["Spell"] = MBH_SPELL_FLASH_OF_LIGHT,
-            ["LAR"] = MoronBoxHeal_Options.ManaProtectionValues.Paladin.Holy_Light_HAR,
-            ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Paladin.Holy_Light_HAR,
+            ["LAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Paladin.Holy_Light_LAR end,
+            ["HAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Paladin.Holy_Light_HAR end,
         },
         [MBH_SPELL_REGROWTH] = {
             ["ThresholdCheck"] = function()
@@ -80,8 +80,8 @@ function MBH_InitializeManaProtectionThresholds()
                 )
             end,
             ["Spell"] = MBH_SPELL_HEALING_TOUCH,
-            ["LAR"] = MoronBoxHeal_Options.ManaProtectionValues.Druid.Regrowth_LAR,
-            ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Druid.Regrowth_HAR,
+            ["LAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Druid.Regrowth_LAR end,
+            ["HAR"] = function() return MoronBoxHeal_Options.ManaProtectionValues.Druid.Regrowth_HAR end,
         },
     }
 end

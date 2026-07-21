@@ -11,10 +11,10 @@ function MBH_GetHealSpell()
         MBH_ScanningTooltip:SetOwner(UIParent, "ANCHOR_NONE")
         MBH_ScanningTooltip:SetAction(i)
 
-        for SPN, Time in pairs(MBH.Session.CastTime) do
+        for SPN, _ in pairs(MBH.Session.CastTime) do
             if MBH_ScanningTooltipTextLeft1:GetText() == SPN then
                 MBH.Session.HealSpell = i
-                break
+                return
             end
         end
     end
@@ -45,8 +45,8 @@ function MBH_UpdateRange()
 
         if MBH.Session.InCombat and not UnitIsEnemy("player", "target") then
             MBH.Session.ExtendedRange.OpenedFrames = (InspectFrame and InspectFrame:IsVisible()) or
-            (LootFrame and LootFrame:IsVisible()) or (XLootFrame and XLootFrame:IsVisible()) or
-            (TradeFrame and TradeFrame:IsVisible())
+                (LootFrame and LootFrame:IsVisible()) or (XLootFrame and XLootFrame:IsVisible()) or
+                (TradeFrame and TradeFrame:IsVisible())
 
             MBH.Session.ExtendedRange.UnitName = UnitName("target")
 
@@ -54,10 +54,8 @@ function MBH_UpdateRange()
 
             for i = 1, MBH.Session.MaxData do
                 if MBH.GroupData[i].UnitID == UNKNOWNOBJECT or MBH.GroupData[i].UnitID == UKNOWNBEING or not MBH.GroupData[i].UnitID then
-                    return
-                end
-
-                if MBH.GroupData[i].Visible and not MBH.GroupData[i].UnitRange and not UnitIsUnit("target", MBH.GroupData[i].UnitID) and not UnitIsUnit("player", MBH.GroupData[i].UnitID) and not MBH.Session.ExtendedRange.OpenedFrames then
+                    -- Abort
+                elseif MBH.GroupData[i].Visible and not MBH.GroupData[i].UnitRange and not UnitIsUnit("target", MBH.GroupData[i].UnitID) and not UnitIsUnit("player", MBH.GroupData[i].UnitID) and not MBH.Session.ExtendedRange.OpenedFrames then
                     TargetUnit(MBH.GroupData[i].UnitID)
 
                     if IsActionInRange(MBH.Session.HealSpell) then

@@ -69,7 +69,7 @@ function MBH_Resurrection()
     local pSpellName = pClassInfo.Spell
     local pGroupType = MBH.Session.Group[3]
 
-    if (pGroupType == "player" and not pSpellName) or getSpells().ImBusy() or MBH.Session.InCombat then
+    if not pSpellName or getSpells().ImBusy() or MBH.Session.InCombat then
         return
     end
 
