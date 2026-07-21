@@ -7,10 +7,10 @@ local ManaProtectionThresholds = {}
 function MBH_InitializeManaProtectionThresholds()
     ManaProtectionThresholds = {
         [MBH_SPELL_FLASH_HEAL] = {
-            ["ThresholdCheck"] = function() 
-                return ( 
-                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_Threshold) 
-                    and MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_Switch 
+            ["ThresholdCheck"] = function()
+                return (
+                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_Threshold)
+                    and MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_Switch
                 )
             end,
             ["Spell"] = MBH_SPELL_HEAL,
@@ -18,10 +18,10 @@ function MBH_InitializeManaProtectionThresholds()
             ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Flash_Heal_HAR,
         },
         [MBH_SPELL_HEAL] = {
-            ["ThresholdCheck"] = function() 
-                return ( 
-                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_Threshold) 
-                    and MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_Switch 
+            ["ThresholdCheck"] = function()
+                return (
+                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_Threshold)
+                    and MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_Switch
                 )
             end,
             ["Spell"] = MBH_SPELL_LESSER_HEAL,
@@ -29,10 +29,10 @@ function MBH_InitializeManaProtectionThresholds()
             ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Heal_HAR,
         },
         [MBH_SPELL_GREATER_HEAL] = {
-            ["ThresholdCheck"] = function() 
-                return ( 
-                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_Threshold) 
-                    and MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_Switch 
+            ["ThresholdCheck"] = function()
+                return (
+                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_Threshold)
+                    and MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_Switch
                 )
             end,
             ["Spell"] = MBH_SPELL_HEAL,
@@ -40,9 +40,9 @@ function MBH_InitializeManaProtectionThresholds()
             ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Priest.Greater_Heal_HAR,
         },
         [MBH_SPELL_CHAIN_HEAL] = {
-            ["ThresholdCheck"] = function() 
-                return ( 
-                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Shaman.Chain_Heal_Threshold) 
+            ["ThresholdCheck"] = function()
+                return (
+                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Shaman.Chain_Heal_Threshold)
                     and MoronBoxHeal_Options.ManaProtectionValues.Shaman.Chain_Heal_Switch
                 )
             end,
@@ -51,9 +51,9 @@ function MBH_InitializeManaProtectionThresholds()
             ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Shaman.Chain_Heal_HAR,
         },
         [MBH_SPELL_LESSER_HEALING_WAVE] = {
-            ["ThresholdCheck"] = function() 
+            ["ThresholdCheck"] = function()
                 return (
-                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Shaman.Lesser_Healing_Wave_Threshold) 
+                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Shaman.Lesser_Healing_Wave_Threshold)
                     and MoronBoxHeal_Options.ManaProtectionValues.Shaman.Lesser_Healing_Wave_Switch
                 )
             end,
@@ -62,9 +62,9 @@ function MBH_InitializeManaProtectionThresholds()
             ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Shaman.Lesser_Healing_Wave_HAR,
         },
         [MBH_SPELL_HOLY_LIGHT] = {
-            ["ThresholdCheck"] = function() 
+            ["ThresholdCheck"] = function()
                 return (
-                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Paladin.Holy_Light_Threshold) 
+                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Paladin.Holy_Light_Threshold)
                     and MoronBoxHeal_Options.ManaProtectionValues.Paladin.Holy_Light_Switch
                 )
             end,
@@ -73,9 +73,9 @@ function MBH_InitializeManaProtectionThresholds()
             ["HAR"] = MoronBoxHeal_Options.ManaProtectionValues.Paladin.Holy_Light_HAR,
         },
         [MBH_SPELL_REGROWTH] = {
-            ["ThresholdCheck"] = function() 
+            ["ThresholdCheck"] = function()
                 return (
-                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Druid.Regrowth_Threshold) 
+                    MBH_ManaProtectionThresholdCheck(MoronBoxHeal_Options.ManaProtectionValues.Druid.Regrowth_Threshold)
                     and MoronBoxHeal_Options.ManaProtectionValues.Druid.Regrowth_Switch
                 )
             end,
@@ -91,27 +91,26 @@ end
 -------------------------------------------------------------------------------
 
 function MBH_Cast(SPN, LAR, HAR)
+    if MBH.Session.Autoheal.IsCasting and MBH.Session.Autoheal.UnitID then
+        local OverHealVal = MBH.Session.Autoheal.OutgoingHeal *
+            MBH_ConvertToFractionFromPercentage(MoronBoxHeal_Options.AutoHeal.Allowed_Overheal_Percentage)
 
-	if MBH.Session.Autoheal.IsCasting and MBH.Session.Autoheal.UnitID then
-        local OverHealVal = MBH.Session.Autoheal.OutgoingHeal * MBH_ConvertToFractionFromPercentage(MoronBoxHeal_Options.AutoHeal.Allowed_Overheal_Percentage)
+        if OverHealVal > getUnit().HealthDown(MBH.Session.Autoheal.UnitID) then
+            SpellStopCasting()
+        end
+    else
+        local HealUnitID = MBH_GetHealUnitID(SPN)
 
-		if OverHealVal > mb_healthDown(MBH.Session.Autoheal.UnitID) then
-			SpellStopCasting()
-		end
-	else
-		local HealUnitID = MBH_GetHealUnitID(SPN)
-		
-		if HealUnitID then
-			MBH.Session.Autoheal.UnitID = HealUnitID
-			MBH.Session.CurrentUnit = HealUnitID
+        if HealUnitID then
+            MBH.Session.Autoheal.UnitID = HealUnitID
+            MBH.Session.CurrentUnit = HealUnitID
 
-			MBH_CastSpell(SPN, LAR, HAR, MBH.Session.Autoheal.UnitID)
-		end
-	end
+            MBH_CastSpell(SPN, LAR, HAR, MBH.Session.Autoheal.UnitID)
+        end
+    end
 end
 
 function MBH_CastSpell(SPN, LAR, HAR, UnitID)
-
     if UnitID == UNKNOWNOBJECT or UnitID == UKNOWNBEING then
         return
     end
@@ -120,18 +119,16 @@ function MBH_CastSpell(SPN, LAR, HAR, UnitID)
         HealthDown = 0,
         Spell = nil,
         Rank = nil,
-        DefaultSpell = SPN.."(Rank 1)"
+        DefaultSpell = SPN .. "(Rank 1)"
     }
 
     Cache.Spell, Cache.Rank = MBH_ExtractSpell(Cache.DefaultSpell)
 
     if MBH.ACE.HealComm.Spells[Cache.Spell] then
-        
         Cache.Rank, Cache.HealthDown = MBH_CalculateRank(Cache.Spell, LAR, HAR, UnitID)
 
         if Cache.HealthDown >= MBH.Session.Autoheal.CalculatedHeal then
-
-            local Castable = Cache.Spell.."(Rank "..Cache.Rank..")"   
+            local Castable = Cache.Spell .. "(Rank " .. Cache.Rank .. ")"
 
             if UnitCanAttack("player", UnitID) or (UnitExists("target") and not UnitCanAttack("player", "target") and not UnitIsUnit(UnitID, "target")) then
                 ClearTarget()
@@ -153,14 +150,13 @@ function MBH_CastSpell(SPN, LAR, HAR, UnitID)
 end
 
 function MBH_CalculateRank(SPN, LAR, HAR, UnitID)
-
     if UnitID == UNKNOWNOBJECT or UnitID == UKNOWNBEING then
         return
     end
 
     local HealBonus = MBH.ACE.ItemBonus:GetBonus("HEAL")
     local MaxRank = MBH_GetMaxSpellRank(SPN)
-	local HealthDown = mb_healthDown(UnitID)
+    local HealthDown = getUnit().HealthDown(UnitID)
 
     local TargetPower, TargetMod = MBH.ACE.HealComm:GetUnitSpellPower(UnitID, SPN)
     local BuffPower, BuffMod = MBH.ACE.HealComm:GetBuffSpellPower()
@@ -172,15 +168,14 @@ function MBH_CalculateRank(SPN, LAR, HAR, UnitID)
     local CalculatedHeal = 0
 
     if (SPN == MBH_SPELL_HEALING_TOUCH and MoronBoxHeal_Options.ManaProtectionValues.Druid.Only_Rank_3) then
-
         CalculatedRank = 3
-        if mb_hasBuffOrDebuff("Nature's Grace", "player", "buff") then
+        if getAura().HasBuffOrDebuff("Nature's Grace", "player", "buff") then
             CalculatedRank = 4
         end
     else
         for i = MaxRank, 1, -1 do
             local HealOutput = ((MBH.ACE.HealComm.Spells[SPN][i](HealBonus) + TargetPower) * BuffMod * TargetMod)
-            
+
             if HealOutput < HealthDown then
                 if i < MaxRank then
                     CalculatedRank = i + 1
@@ -204,14 +199,13 @@ function MBH_CalculateRank(SPN, LAR, HAR, UnitID)
     local CalculatedHealRank = (CalculatedRank > 1) and (CalculatedRank - 1) or 1
     OutgoingHeal = ((math.floor(MBH.ACE.HealComm.Spells[SPN][CalculatedRank](HealBonus)) + TargetPower) * BuffMod * TargetMod)
     CalculatedHeal = ((math.floor(MBH.ACE.HealComm.Spells[SPN][CalculatedHealRank](HealBonus)) + TargetPower) * BuffMod * TargetMod)
-  
+
     MBH.Session.Autoheal.OutgoingHeal = OutgoingHeal
     MBH.Session.Autoheal.CalculatedHeal = CalculatedHeal
     return CalculatedRank, HealthDown
 end
 
 function MBH_ManaProtection(SPN, LAR, HAR)
-
     if not MoronBoxHeal_Options.AdvancedOptions.Mana_Protection then
         return SPN, LAR or 1, HAR or MBH_GetMaxSpellRank(SPN)
     end
@@ -234,9 +228,9 @@ function MBH_ManaProtection(SPN, LAR, HAR)
 end
 
 function MBH_CastHeal(SPN, LAR, HAR)
-    local MPH, MPLAR , MPHAR = MBH_ManaProtection(SPN, LAR, HAR)
+    local MPH, MPLAR, MPHAR = MBH_ManaProtection(SPN, LAR, HAR)
     MBH.Session.SpellName = MPH
-	if MBH.Session.CastTime[MBH.Session.SpellName] then
-		MBH_Cast(MBH.Session.SpellName, MPLAR, MPHAR)
-	end
+    if MBH.Session.CastTime[MBH.Session.SpellName] then
+        MBH_Cast(MBH.Session.SpellName, MPLAR, MPHAR)
+    end
 end

@@ -79,11 +79,11 @@ MBH.DefaultOptions = {
 MBH.Session = {
     SpellName = nil,
     CurrentUnit = nil,
-    MaxData = 60, -- Max. amount of players in the buffer -- change this to increase/decrease performance.
+    MaxData = 60,    -- Max. amount of players in the buffer -- change this to increase/decrease performance.
     HealSpell = nil, -- Track Spell Location
     InCombat = nil,
     PlayerName = UnitName("player"),
-	PlayerClass = UnitClass("player"),
+    PlayerClass = UnitClass("player"),
     Elapsed = 0,
     I = 1,
     Group = {
@@ -93,19 +93,19 @@ MBH.Session = {
     },
     CastTime = {
         [MBH_SPELL_CHAIN_HEAL] = 2.5,
-		[MBH_SPELL_HOLY_LIGHT] = 2.5,
-		[MBH_SPELL_FLASH_OF_LIGHT] = 1.5,
-		[MBH_SPELL_HEALING_WAVE] = 2,
-		[MBH_SPELL_LESSER_HEALING_WAVE] = 1.5,
-		[MBH_SPELL_LESSER_HEAL] = 2,
-		[MBH_SPELL_HEAL] = 2.5,
-		[MBH_SPELL_FLASH_HEAL] = 1.5,
-		[MBH_SPELL_GREATER_HEAL] = 2.5,
-		[MBH_SPELL_HEALING_TOUCH] = 2.5,
-		[MBH_SPELL_REGROWTH] = 2
-	},
+        [MBH_SPELL_HOLY_LIGHT] = 2.5,
+        [MBH_SPELL_FLASH_OF_LIGHT] = 1.5,
+        [MBH_SPELL_HEALING_WAVE] = 2,
+        [MBH_SPELL_LESSER_HEALING_WAVE] = 1.5,
+        [MBH_SPELL_LESSER_HEAL] = 2,
+        [MBH_SPELL_HEAL] = 2.5,
+        [MBH_SPELL_FLASH_HEAL] = 1.5,
+        [MBH_SPELL_GREATER_HEAL] = 2.5,
+        [MBH_SPELL_HEALING_TOUCH] = 2.5,
+        [MBH_SPELL_REGROWTH] = 2
+    },
     Autoheal = {
-		IsCasting = nil,
+        IsCasting = nil,
         UnitID = nil,
         OutgoingHeal = 0,
         CalculatedHeal = 0,
@@ -135,8 +135,8 @@ MBH.Session = {
 -------------------------------------------------------------------------------
 
 do
-	for _, event in {
-		"ADDON_LOADED", 
+    for _, event in {
+        "ADDON_LOADED",
         "RAID_ROSTER_UPDATE",
         "PARTY_MEMBERS_CHANGED",
         "SPELLCAST_START",
@@ -149,23 +149,23 @@ do
         "PLAYER_REGEN_ENABLED",
         "PLAYER_REGEN_DISABLED",
         "CHAT_MSG_ADDON"
-		} 
-		do MBH:RegisterEvent(event)
-	end
+    }
+    do
+        MBH:RegisterEvent(event)
+    end
 end
 
 function MBH:OnEvent()
-    if ( event == "ADDON_LOADED" and arg1 == MBH_TITLE ) then
-
+    if (event == "ADDON_LOADED" and arg1 == MBH_TITLE) then
         MBH_SetupSavedVariables()
-        
-		MBH.Session.CurrentUnit = nil
-		MBH.Session.Autoheal.IsCasting = nil
-		MBH.Session.Autoheal.OutgoingHeal = 0
-        MBH.Session.Autoheal.CalculatedHeal = 0
-		MBH.Session.Autoheal.UnitID = nil
 
-        if mb_equippedSetCount("Stormcaller's Garb") == 5 then
+        MBH.Session.CurrentUnit = nil
+        MBH.Session.Autoheal.IsCasting = nil
+        MBH.Session.Autoheal.OutgoingHeal = 0
+        MBH.Session.Autoheal.CalculatedHeal = 0
+        MBH.Session.Autoheal.UnitID = nil
+
+        if getGear().EquippedSetCount("Stormcaller's Garb") == 5 then
             MBH.Session.CastTime[MBH_SPELL_CHAIN_HEAL] = 2.1
         else
             MBH.Session.CastTime[MBH_SPELL_CHAIN_HEAL] = 2.5
@@ -182,70 +182,51 @@ function MBH:OnEvent()
         MBH:CreateWindows()
 
         AddonInitializer:SetScript("OnUpdate", AddonInitializer.OnUpdate)
-
-    elseif ( event == "SPELLCAST_STOP" or event ==  "SPELLCAST_INTERRUPTED" or event == "SPELLCAST_FAILED" ) then
-
-		MBH.Session.CurrentUnit = nil
-		MBH.Session.Autoheal.IsCasting = nil
-		MBH.Session.Autoheal.OutgoingHeal = 0
+    elseif (event == "SPELLCAST_STOP" or event == "SPELLCAST_INTERRUPTED" or event == "SPELLCAST_FAILED") then
+        MBH.Session.CurrentUnit = nil
+        MBH.Session.Autoheal.IsCasting = nil
+        MBH.Session.Autoheal.OutgoingHeal = 0
         MBH.Session.Autoheal.CalculatedHeal = 0
-		MBH.Session.Autoheal.UnitID = nil
-		
-	elseif ( event == "SPELLCAST_START" ) then
+        MBH.Session.Autoheal.UnitID = nil
+    elseif (event == "SPELLCAST_START") then
+        if MBH.Session.CastTime[arg1] then
+            MBH.Session.Autoheal.IsCasting = true
 
-		if MBH.Session.CastTime[arg1] then
-			MBH.Session.Autoheal.IsCasting = true
-			
-			if not MBH.Session.CurrentUnit then 
-				MBH.Session.CurrentUnit = "target" 
-			end
-		end
-
-    elseif ( event == "UI_ERROR_MESSAGE" ) then
-
-		if MoronBoxHeal_Options.LineOfSight.Enable and arg1 == "Target not in line of sight" and MBH.Session.CurrentUnit then
-
-			for i = 1, MBH.Session.MaxData do 
-				if MBH.GroupData[i].UnitID == MBH.Session.CurrentUnit then
+            if not MBH.Session.CurrentUnit then
+                MBH.Session.CurrentUnit = "target"
+            end
+        end
+    elseif (event == "UI_ERROR_MESSAGE") then
+        if MoronBoxHeal_Options.LineOfSight.Enable and arg1 == "Target not in line of sight" and MBH.Session.CurrentUnit then
+            for i = 1, MBH.Session.MaxData do
+                if MBH.GroupData[i].UnitID == MBH.Session.CurrentUnit then
                     MBH.Track[MBH.GroupData[i].UnitID].LOS = MoronBoxHeal_Options.LineOfSight.TimeOut
                     break
                 end
-			end
-		end
-
-    elseif ( event == "PLAYER_REGEN_ENABLED" ) then
-
-		MBH.Session.InCombat = nil
-
-	elseif ( event == "PLAYER_REGEN_DISABLED" ) then
-
-		MBH.Session.InCombat = true
-		
-	elseif ( event == "RAID_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" ) then
-
-		MBH_SetupData()
-
-	elseif ( event == "ACTIONBAR_SLOT_CHANGED" ) then
-
-		MBH_GetHealSpell()
-	
-    elseif ( event == "UNIT_INVENTORY_CHANGED" ) then
-
-        if mb_equippedSetCount("Stormcaller's Garb") == 5 then
+            end
+        end
+    elseif (event == "PLAYER_REGEN_ENABLED") then
+        MBH.Session.InCombat = nil
+    elseif (event == "PLAYER_REGEN_DISABLED") then
+        MBH.Session.InCombat = true
+    elseif (event == "RAID_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED") then
+        MBH_SetupData()
+    elseif (event == "ACTIONBAR_SLOT_CHANGED") then
+        MBH_GetHealSpell()
+    elseif (event == "UNIT_INVENTORY_CHANGED") then
+        if getGear().EquippedSetCount("Stormcaller's Garb") == 5 then
             MBH.Session.CastTime[MBH_SPELL_CHAIN_HEAL] = 2.1
         else
             MBH.Session.CastTime[MBH_SPELL_CHAIN_HEAL] = 2.5
         end
-    
-    elseif ( event == "CHAT_MSG_ADDON" ) then
-
+    elseif (event == "CHAT_MSG_ADDON") then
         if arg1 == MBH.Session.Reviving.Add_BlackList then
             MBH_ResurrectionBlackPlayer(arg2)
         end
     end
 end
 
-MBH:SetScript("OnEvent", MBH.OnEvent) 
+MBH:SetScript("OnEvent", MBH.OnEvent)
 
 function MBH:OnUpdate()
     MBH.Session.Elapsed = arg1
@@ -256,16 +237,16 @@ function MBH:OnUpdate()
         Time = MoronBoxHeal_Options.AdvancedOptions.LagPrevention.Frequency
     end
 
-    MBH.Session.AdvancedOptions.LagPrevention.Time = MBH.Session.AdvancedOptions.LagPrevention.Time + MBH.Session.Elapsed
-	if ( MBH.Session.AdvancedOptions.LagPrevention.Time >= Time ) then
-
+    MBH.Session.AdvancedOptions.LagPrevention.Time = MBH.Session.AdvancedOptions.LagPrevention.Time + MBH.Session
+        .Elapsed
+    if (MBH.Session.AdvancedOptions.LagPrevention.Time >= Time) then
         MBH.Session.AdvancedOptions.LagPrevention.Time = 0
 
         MBH_ClearData()
         MBH_UpdateData()
 
-        if MoronBoxHeal_Options.ExtendedRange.Enable then 
-            MBH_UpdateRange() 
+        if MoronBoxHeal_Options.ExtendedRange.Enable then
+            MBH_UpdateRange()
         end
     end
 
@@ -274,28 +255,27 @@ function MBH:OnUpdate()
             if Timer > 0 then
                 MBH.Session.Reviving.ResurrectionBlackList[Name] = Timer - MBH.Session.Elapsed
             else
-                MBH.Session.Reviving.ResurrectionBlackList[Name ] = nil
+                MBH.Session.Reviving.ResurrectionBlackList[Name] = nil
             end
         end
     end
 end
 
-MBH:SetScript("OnUpdate", MBH.OnUpdate) 
+MBH:SetScript("OnUpdate", MBH.OnUpdate)
 
 function MBH_SetupSavedVariables()
-    if not MoronBoxHeal_Options  then
-		MoronBoxHeal_Options = {}
-	end
+    if not MoronBoxHeal_Options then
+        MoronBoxHeal_Options = {}
+    end
 
-	for i in MBH.DefaultOptions do
-		if (not MoronBoxHeal_Options[i]) then
-			MoronBoxHeal_Options[i] = MBH.DefaultOptions[i]
-		end
-	end
+    for i in MBH.DefaultOptions do
+        if (not MoronBoxHeal_Options[i]) then
+            MoronBoxHeal_Options[i] = MBH.DefaultOptions[i]
+        end
+    end
 end
 
 function AddonInitializer:OnUpdate()
-
     MBH.Session.AddonLoader.Cooldown = MBH.Session.AddonLoader.Cooldown - MBH.Session.Elapsed
     if MBH.Session.AddonLoader.Cooldown > 0 then return end
 

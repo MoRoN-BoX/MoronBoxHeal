@@ -26,7 +26,7 @@ local function MBH_ChooseCorpse(Table)
             return v.UnitID, UnitName(v.UnitID)
         end
     end
-	return nil, nil
+    return nil, nil
 end
 
 local function MBH_GetClassInfo(Class)
@@ -48,7 +48,7 @@ local function MBH_NoRessTargets(RessTable)
             MBH_ErrorMessage("There is no one to resurrect.")
         else
             MBH_ErrorMessage("All targets have received a res.")
-            mb_setup()
+            getRotation().Setup()
         end
         return true
     end
@@ -57,7 +57,7 @@ end
 
 local function MBH_AnnounceResurrection(Name, Channel)
     SendAddonMessage(MBH.Session.Reviving.Add_BlackList, Name, Channel)
-    mb_cdMessage("Ressing <"..Name..">")
+    getApi().CdMessage("Ressing <" .. Name .. ">")
 end
 
 -------------------------------------------------------------------------------
@@ -65,12 +65,11 @@ end
 -------------------------------------------------------------------------------
 
 function MBH_Resurrection()
-
     local pClassInfo = MBH_GetClassInfo(MBH.Session.PlayerClass)
     local pSpellName = pClassInfo.Spell
     local pGroupType = MBH.Session.Group[3]
 
-    if (pGroupType == "player" and not pSpellName) or mb_imBusy() or MBH.Session.InCombat then
+    if (pGroupType == "player" and not pSpellName) or getSpells().ImBusy() or MBH.Session.InCombat then
         return
     end
 
@@ -79,13 +78,11 @@ function MBH_Resurrection()
     local RessTable = {}
 
     for n = 1, pGroupSize do
-
-        local UnitID = pGroupType..n
+        local UnitID = pGroupType .. n
         local Name = UnitName(UnitID)
 
-        if UnitIsDead(UnitID) and UnitIsConnected(UnitID) and UnitIsVisible(UnitID) and 
-            mb_in28yardRange(UnitID) and not MBH_IsPlayerBlackListed(Name) then
-
+        if UnitIsDead(UnitID) and UnitIsConnected(UnitID) and UnitIsVisible(UnitID) and
+            getUnit().In28YardRange(UnitID) and not MBH_IsPlayerBlackListed(Name) then
             local tClassInfo = MBH_GetClassInfo(UnitClass(UnitID))
             local tPriority = tClassInfo.Priority
             local ptName = UnitName("playertarget")
@@ -93,23 +90,21 @@ function MBH_Resurrection()
             if ptName and ptName == Name then
                 tPriority = 100
             end
-            
+
             tPriority = tPriority + math.random()
             table.insert(RessTable, { UnitID = UnitID, Priority = tPriority })
         end
-    end	
+    end
 
     if MBH_NoRessTargets(RessTable) then return end
 
     CastSpellByName(pSpellName)
-    local tUnitID, tName = MBH_ChooseCorpse(RessTable)	
+    local tUnitID, tName = MBH_ChooseCorpse(RessTable)
 
     if tUnitID then
-
         SpellTargetUnit(tUnitID)
 
         if not SpellIsTargeting() then
-
             MBH_AnnounceResurrection(tName, pGroupChannel)
         else
             SpellStopTargeting()
