@@ -217,11 +217,11 @@ function MBH_ManaProtectionThresholdCheck(PCT)
 end
 
 function MBH_PrintMessage(message)
-    DEFAULT_CHAT_FRAME:AddMessage("|cffC71585" .. MBH_TITLE .. ": |cff00ff00" .. message)
+    DEFAULT_CHAT_FRAME:AddMessage("|cffFF8000" .. MBH_TITLE .. ": |cff00ff00" .. message)
 end
 
 function MBH_ErrorMessage(message)
-    DEFAULT_CHAT_FRAME:AddMessage("|cffC71585" .. MBH_TITLE .. ": |cFFFF0000" .. message)
+    DEFAULT_CHAT_FRAME:AddMessage("|cffFF8000" .. MBH_TITLE .. ": |cFFFF0000" .. message)
 end
 
 function MBH_GetNumberOfParties()

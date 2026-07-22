@@ -121,9 +121,6 @@ MBH.Session = {
             Time = 0,
         },
     },
-    AddonLoader = {
-        Cooldown = 2.5
-    },
     Reviving = {
         ResurrectionBlackList = {},
         Add_BlackList = "TX_RESBEGIN",
@@ -155,9 +152,39 @@ do
     end
 end
 
+MoronBox.HookCore(function()
+    if getGear().EquippedSetCount("Stormcaller's Garb") == 5 then
+        MBH.Session.CastTime[MBH_SPELL_CHAIN_HEAL] = 2.1
+    else
+        MBH.Session.CastTime[MBH_SPELL_CHAIN_HEAL] = 2.5
+    end
+
+    MBH_SetupData()
+    MBH_GetHealSpell()
+    MBH_InitalData()
+
+    MoronBox.DelayExecutionOrder({
+        -- Task 1
+        function()
+            MBH_PrintMessage(MBH_ADDONLOADED)
+        end,
+
+        -- Task 2
+        function()
+            if MBH_DISABLEADDON[MBH.Session.PlayerClass] then
+                if GetAddOnInfo(MBH_TITLE) then
+                    DisableAddOn(MBH_TITLE)
+                    MBH_ErrorMessage(MBH_ADDONDISABLED)
+                end
+            end
+        end,
+    }, 0.5)
+end)
+
 function MBH:OnEvent()
     if (event == "ADDON_LOADED" and arg1 == MBH_TITLE) then
         MBH_SetupSavedVariables()
+        MBH_InitalData()
 
         MBH.Session.CurrentUnit = nil
         MBH.Session.Autoheal.IsCasting = nil
@@ -165,23 +192,13 @@ function MBH:OnEvent()
         MBH.Session.Autoheal.CalculatedHeal = 0
         MBH.Session.Autoheal.UnitID = nil
 
-        if getGear().EquippedSetCount("Stormcaller's Garb") == 5 then
-            MBH.Session.CastTime[MBH_SPELL_CHAIN_HEAL] = 2.1
-        else
-            MBH.Session.CastTime[MBH_SPELL_CHAIN_HEAL] = 2.5
-        end
-
         MBH.ACE = AceLibrary("AceAddon-2.0"):new("AceEvent-2.0")
         MBH.ACE.HealComm = AceLibrary("HealComm-1.0")
         MBH.ACE.Banzai = AceLibrary("Banzai-1.0")
         MBH.ACE.ItemBonus = AceLibrary("ItemBonusLib-1.0")
 
-        MBH_SetupData()
-        MBH_GetHealSpell()
         MBH_InitalData()
         MBH:CreateWindows()
-
-        AddonInitializer:SetScript("OnUpdate", AddonInitializer.OnUpdate)
     elseif (event == "SPELLCAST_STOP" or event == "SPELLCAST_INTERRUPTED" or event == "SPELLCAST_FAILED") then
         MBH.Session.CurrentUnit = nil
         MBH.Session.Autoheal.IsCasting = nil
@@ -273,22 +290,4 @@ function MBH_SetupSavedVariables()
             MoronBoxHeal_Options[i] = getApi().CopyTable(MBH.DefaultOptions[i])
         end
     end
-end
-
-function AddonInitializer:OnUpdate()
-    local elapsed = arg1 or 0
-    MBH.Session.Elapsed = elapsed
-    MBH.Session.AddonLoader.Cooldown = MBH.Session.AddonLoader.Cooldown - elapsed
-    if MBH.Session.AddonLoader.Cooldown > 0 then return end
-
-    MBH_PrintMessage(MBH_ADDONLOADED)
-
-    if MBH_DISABLEADDON[MBH.Session.PlayerClass] then
-        if GetAddOnInfo(MBH_TITLE) then
-            DisableAddOn(MBH_TITLE)
-            MBH_ErrorMessage(MBH_ADDONDISABLED)
-        end
-    end
-
-    AddonInitializer:SetScript("OnUpdate", nil)
 end

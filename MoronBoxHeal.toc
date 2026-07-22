@@ -1,7 +1,8 @@
 ## Interface: 11200
-## Title: MoronBoxHeal by |cff00ccffMoRoN|r
-## Author: MoRoN
-## Notes: |cff00ccffMoronBoxHeal|r is a advanced healing addon that supports "Chain Heal" kept as lightweight as possible and optimized for Multiboxing.
+## Title: MoronBoxHeal by |cffDA70D6MoroN|r
+## Author: MoroN
+## Notes: |cffFF8000MoronBoxHeal|r is an advanced healing addon that supports "Chain Heal" kept as lightweight as possible and optimized for Multiboxing.
+## Version: 3.0.0
 ## Dependencies: MoronBoxCore
 ## LoadOnDemand: 0
 ## SavedVariablesPerCharacter: MoronBoxHeal_Options
